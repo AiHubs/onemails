@@ -1,0 +1,49 @@
+{
+  "name": "zero",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.11.0",
+  "workspaces": {
+    "packages": ["packages/*"],
+    "catalog": {
+      "typescript": "^5.8.3"
+    }
+  },
+  "scripts": {
+    "prepare": "husky",
+    "nizzy": "tsx ./packages/cli/src/cli.ts",
+    "postinstall": "pnpm nizzy sync",
+    "dev": "dotenv -- turbo run dev",
+    "build": "dotenv -- turbo run build",
+    "build:frontend": "pnpm run --filter=@zero/mail build",
+    "deploy:frontend": "pnpm run --filter=@zero/mail deploy",
+    "deploy:backend": "pnpm run --filter=@zero/server deploy",
+    "start": "dotenv -- turbo run start",
+    "lint": "dotenv -- turbo run lint",
+    "format": "prettier --write apps/**/*.{ts,tsx} --log-level silent",
+    "check": "pnpm run check:format && pnpm run lint",
+    "check:format": "prettier . --check",
+    "lint-staged": "prettier --write --ignore-unknown",
+    "docker:db:up": "docker-compose -f docker-compose.db.yaml up -d",
+    "docker:db:down": "docker-compose -f docker-compose.db.yaml down",
+    "docker:db:clean": "docker-compose -f docker-compose.db.yaml down -v",
+    "db:generate": "dotenv -- turbo run db:generate",
+    "db:migrate": "dotenv -- turbo run db:migrate",
+    "db:push": "dotenv -- turbo run db:push",
+    "db:studio": "dotenv -- turbo run db:studio",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org zero-7y --project nextjs ./apps/mail/.next && sentry-cli sourcemaps upload --org zero-7y --project nextjs ./apps/mail/.next",
+    "scripts": "dotenv -- pnpx tsx ./scripts/run.ts"
+  },
+  "devDependencies": {
+    "@types/node": "22.13.8",
+    "@zero/tsconfig": "workspace:*",
+    "dotenv-cli": "^8.0.0",
+    "husky": "9.1.7",
+    "prettier": "3.5.3",
+    "prettier-plugin-sort-imports": "1.8.6",
+    "prettier-plugin-tailwindcss": "0.6.11",
+    "tsx": "4.19.4",
+    "turbo": "^2.5.0",
+    "typescript": "catalog:"
+  }
+}
